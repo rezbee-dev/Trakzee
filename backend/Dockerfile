@@ -12,6 +12,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # for more info, see: https://stackoverflow.com/a/59812588
 ENV PYTHONUNBUFFERED 1
 
+# install system dependencies
+# need this for docker-entrypoint.sh
+RUN apt-get update \
+  && apt-get -y install netcat gcc postgresql \
+  && apt-get clean
+
 # add and install requirements
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
@@ -19,5 +25,8 @@ RUN pip install -r requirements.txt
 # add app
 COPY . .
 
-# run server
-CMD ["python", "src/main.py", "run", "-h", "0.0.0.0"]
+# make startup script executable
+RUN chmod +x /usr/app/scripts/docker-entrypoint.sh
+
+# Starting flask app w/o waiting for db startup
+# CMD ["python", "src/main.py", "run", "-h", "0.0.0.0"]
