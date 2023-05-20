@@ -9,10 +9,10 @@ services:
     ports:
       - 5004:5000
     environment:
-      - FLASK_APP=src/app.py
+      - FLASK_APP=src/server/app.py
       - FLASK_DEBUG=1
       - FLASK_ENV=development
-      - APP_SETTINGS=config.DevelopmentConfig
+      - APP_SETTINGS=server.config.DevelopmentConfig
       - DATABASE_URL=postgresql://postgres:postgres@api-db:5432/api_dev
       - DATABASE_TEST_URL=postgresql://postgres:postgres@api-db:5432/api_test
     depends_on:
