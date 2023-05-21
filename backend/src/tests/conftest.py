@@ -4,12 +4,13 @@
 
 import pytest
 
-from server.app import app, db
+from server.app import create_app, db
 
 # scopes determine how often fixture is invoked
 # Module = once per test module
 @pytest.fixture(scope='module')
 def test_app():
+    app = create_app()
     app.config.from_object('server.config.TestingConfig')
     with app.app_context():
         yield app  # testing happens here

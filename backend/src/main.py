@@ -1,7 +1,10 @@
 from flask.cli import FlaskGroup
-from server.app import app, db
+from server.app import create_app, db
+from server.user.schema import User
 
-cli = FlaskGroup(app)
+# application factory in use
+app = create_app()
+cli = FlaskGroup(create_app=create_app)
 
 # Registers CLI command for recreating db 
 @cli.command('recreate_db')
