@@ -41,13 +41,13 @@ jobs:
           DATABASE_URL: sqlite:///sqlite.db
         run: |
           echo $DATABASE_TEST_URL
-          python -m pytest "src/tests" -p no:warnings --maxfail=2 -s
+          python -m pytest "src/tests" -p no:warnings --maxfail=2
       - name: Flake8
         working-directory: ./api
         run: python -m flake8 src
       - name: Black
         working-directory: ./api
-        run: python -m black src --check
+        run: python -m black --line-length 119 src --check
       - name: isort
         working-directory: ./api
         run: python -m isort src --check-only
