@@ -14,8 +14,6 @@ from server.user.service import UserService
 def test_app():
     app = create_app()
     app.config.from_object("server.config.TestingConfig")
-    print("app configs testing", app['TESTING'])
-    print("app configs db", app['SQLALCHEMY_DATABASE_URI'])
 
     with app.app_context():
         yield app  # testing happens here
