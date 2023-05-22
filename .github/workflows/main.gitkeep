@@ -1,0 +1,93 @@
+
+# Kept getting 137 error code (container running out of memory?)
+# No idea how to fix, but I'll archive this for my reference
+name: CICD
+
+on:
+  push:
+    branches: ["main"]
+
+env:
+  # see for tr: https://linuxhint.com/bash_tr_command/
+  # here, it converts all uppercase in GITHUB_REPOSITORY to lowercase
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr [:upper:] [:lower:])/app
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Log in to GitHub Packages
+        run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+          CI_PAT: ${{ secrets.CI_PAT }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true
+      - name: Build images
+        run: |
+          docker build \
+            --cache-from ${{ env.IMAGE }}:latest \
+            --tag ${{ env.IMAGE }}:latest \
+            --file Dockerfile.prod \
+            "."
+      - name: Push image
+        run: |
+          docker push ${{ env.IMAGE }}:latest
+
+  test:
+    name: Test Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: users
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: runner
+          DATABASE_URL: postgresql://runner:runner@postgres:5432/users
+          DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Log in to GitHub Packages
+        run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+          CI_PAT: ${{ secrets.CI_PAT }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.IMAGE }}latest || true
+      - name: Build images
+        run: |
+          docker build \
+            --cache-from ${{ env.IMAGE }}:latest \
+            --tag ${{ env.IMAGE }}:latest \
+            --file Dockerfile.prod \
+            "."
+      - name: Run container
+        run: |
+          docker run \
+            -d \
+            --name trakzee \
+            -e PORT=8765 \
+            -e DATABASE_URL=$DATABASE_URL \
+            -e DATABASE_TEST_URL=$DATABASE_TEST_URL \
+            -p 5003:8765 \
+            ${{ env.IMAGE }}:latest
+      - name: Install requirements
+        run: docker exec trakzee pip install black==23.1.0 flake8==6.0.0 isort==5.12.0 pytest==7.2.2
+      - name: Pytest
+        run: docker exec trakzee python -m pytest src/tests
+      - name: Flake8
+        run: docker exec trakzee python -m flake8 src
+      - name: Black
+        run: docker exec trakzee python -m black src --check
+      - name: isort
+        run: docker exec trakzee python -m isort src --check-only
