@@ -19,9 +19,9 @@ jobs:
         with:
           ref: main
       - name: Log in to GitHub Packages
-        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_PAT: ${{ secrets.CI_PAT }}
       - name: Pull images
         run: |
           docker pull ${{ env.IMAGE }}:latest || true
@@ -55,9 +55,9 @@ jobs:
         with:
           ref: main
       - name: Log in to GitHub Packages
-        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_PAT: ${{ secrets.CI_PAT }}
       - name: Pull images
         run: |
           docker pull ${{ env.IMAGE }}latest || true
