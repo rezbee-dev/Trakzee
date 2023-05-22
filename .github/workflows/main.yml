@@ -13,15 +13,15 @@ jobs:
   test:
     name: Run tests & style-checks
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports: ['5432:5432']
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    # services:
+    #   postgres:
+    #     image: postgres
+    #     env:
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: postgres
+    #       POSTGRES_DB: postgres
+    #     ports: ['5432:5432']
+    #     options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.11
@@ -36,10 +36,10 @@ jobs:
       - name: Pytest
         working-directory: ./api
         env:
-          DATABASE_TEST_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          DATABASE_TEST_URL: sqlite://sqlite.db
         run: |
           echo $DATABASE_TEST_URL
-        #python -m pytest "src/tests" -p no:warnings --maxfail=2
+          python -m pytest "src/tests" -p no:warnings --maxfail=2
       - name: Flake8
         working-directory: ./api
         run: python -m flake8 src
