@@ -1,11 +1,10 @@
 services:
   api:
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
-    entrypoint: ['/usr/app/scripts/docker-entrypoint.sh']
     volumes:
-      - .:/usr/app
+      - ./api:/usr/app/api
     ports:
       - 5004:5000
     environment:
@@ -15,14 +14,21 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@api-db:5432/api_dev
       - DATABASE_TEST_URL=postgresql://postgres:postgres@api-db:5432/api_test
     depends_on:
-      - api-db
+      api-db:
+        condition: service_healthy
 
   api-db:
     build:
-      context: .
-      dockerfile: Dockerfile.db
+      context: ./db
+      dockerfile: Dockerfile
     expose:
       - 5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    # see: https://github.com/peter-evans/docker-compose-healthcheck/tree/master
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

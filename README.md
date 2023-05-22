@@ -14,6 +14,24 @@ Simple web app for tracking your habits. Main purpose is to learn and practice f
 **View Flask logs**
 - `docker compose logs api`
 
+**Lint code**
+- `docker compose exec api flake8 src`
+
+**Format code (check)**
+- `docker compose exec api black src --check`
+
+**Format code**
+- Check before formatting
+  - `docker compose exec api black src --check`
+- Format
+  - `docker compose exec api black src`
+
+**Organize imports**
+- Check
+  - `docker-compose exec api isort src --check-only`
+- Run
+  - `docker-compose exec api isort src`
+
 ### Db commands
 
 **Reset database**
