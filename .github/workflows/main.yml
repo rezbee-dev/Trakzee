@@ -38,7 +38,7 @@ jobs:
         env:
           DATABASE_TEST_URL: postgresql://postgres:postgres@localhost:5432/postgres
         run: |
-          echo "$DATABASE_TEST_URL"
+          echo $DATABASE_TEST_URL
         #python -m pytest "src/tests" -p no:warnings --maxfail=2
       - name: Flake8
         working-directory: ./api
