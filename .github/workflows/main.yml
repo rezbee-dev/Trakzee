@@ -36,7 +36,7 @@ jobs:
       - name: Pytest
         working-directory: ./api
         env:
-          DATABASE_TEST_URL: 'postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+          DATABASE_TEST_URL: 'test_value'
         run: |
           echo "$DATABASE_TEST_URL"
         #python -m pytest "src/tests" -p no:warnings --maxfail=2
@@ -50,29 +50,29 @@ jobs:
         working-directory: ./api
         run: python -m isort src --check-only
 
-  build:
-    name: Build Docker Image
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: main
-      - name: Log in to GitHub Packages
-        run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
-        env:
-          CI_PAT: ${{ secrets.CI_PAT }}
-      - name: Pull images
-        run: |
-          docker pull ${{ env.IMAGE }}:latest || true
-      - name: Build images
-        run: |
-          docker build \
-            --cache-from ${{ env.IMAGE }}:latest \
-            --tag ${{ env.IMAGE }}:latest \
-            --file Dockerfile.prod \
-            "."
-      - name: Push image
-        run: |
-          docker push ${{ env.IMAGE }}:latest
+  # build:
+  #   name: Build Docker Image
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: main
+  #     - name: Log in to GitHub Packages
+  #       run: echo ${CI_PAT} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+  #       env:
+  #         CI_PAT: ${{ secrets.CI_PAT }}
+  #     - name: Pull images
+  #       run: |
+  #         docker pull ${{ env.IMAGE }}:latest || true
+  #     - name: Build images
+  #       run: |
+  #         docker build \
+  #           --cache-from ${{ env.IMAGE }}:latest \
+  #           --tag ${{ env.IMAGE }}:latest \
+  #           --file Dockerfile.prod \
+  #           "."
+  #     - name: Push image
+  #       run: |
+  #         docker push ${{ env.IMAGE }}:latest
