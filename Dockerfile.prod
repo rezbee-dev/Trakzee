@@ -1,0 +1,28 @@
+# pull official base image
+FROM python:3.11.2-slim-buster
+
+# set working directory
+WORKDIR /usr/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV FLASK_DEBUG 0
+ENV FLASK_ENV production
+ENV APP_SETTINGS server.config.ProductionConfig
+
+# add and install requirements
+COPY ./api/requirements.txt .
+RUN pip install -r requirements.txt
+
+# add app
+COPY ./api .
+
+# add and run as non-root user
+RUN adduser --disabled-password myuser
+USER myuser
+
+# run gunicorn
+# see: https://flask.palletsprojects.com/en/2.3.x/deploying/gunicorn/#running
+# $PORT is supplied by Heroku
+CMD cd src && gunicorn --bind 0.0.0.0:$PORT main:app
