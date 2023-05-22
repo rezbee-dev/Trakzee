@@ -78,8 +78,8 @@ jobs:
             -e DATABASE_TEST_URL=$DATABASE_TEST_URL \
             -p 5003:8765 \
             ${{ env.IMAGE }}:latest
-      - name: Install requirements
-        run: docker exec trakzee pip install black==23.1.0 flake8==6.0.0 isort==5.12.0 pytest==7.2.2
+      # - name: Install requirements
+      #   run: docker exec trakzee pip install black==23.1.0 flake8==6.0.0 isort==5.12.0 pytest==7.2.2
       - name: Pytest
         run: docker exec trakzee python -m pytest src/tests
       - name: Flake8
