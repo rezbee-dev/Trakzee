@@ -8,11 +8,6 @@ env:
   # see for tr: https://linuxhint.com/bash_tr_command/
   # here, it converts all uppercase in GITHUB_REPOSITORY to lowercase
   IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr [:upper:] [:lower:])/app
-  POSTGRES_DB: users
-  POSTGRES_USER: runner
-  POSTGRES_PASSWORD: runner
-  DATABASE_URL: postgresql://runner:runner@postgres:5432/users
-  DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
 
 jobs:
   test:
@@ -22,11 +17,11 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          DATABASE_URL: ${{ env.DATABASE_URL }}
-          DATABASE_TEST_URL: ${{ env.DATABASE_TEST_URL }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.11
@@ -41,12 +36,8 @@ jobs:
       - name: Pytest
         working-directory: ./api
         env:
-          FLASK_DEBUG: 1
-          FLASK_ENV: development
-          APP_SETTINGS: server.config.DevelopmentConfig
-          DATABASE_URL: ${{ env.DATABASE_URL }}
-          DATABASE_TEST_URL: ${{ env.DATABASE_TEST_URL }}
-        run: python -m pytest "src/tests" -p no:warnings
+          DATABASE_TEST_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+        run: python -m pytest "src/tests" -p no:warnings --maxfail=2
       - name: Flake8
         working-directory: ./api
         run: python -m flake8 src
