@@ -37,8 +37,8 @@ jobs:
         working-directory: ./api
         env:
           APP_SETTINGS: server.config.DevelopmentConfig
-          DATABASE_TEST_URL: sqlite://sqlite.db
-          DATABASE_URL: sqlite://sqlite.db
+          DATABASE_TEST_URL: sqlite:///sqlite.db
+          DATABASE_URL: sqlite:///sqlite.db
         run: |
           echo $DATABASE_TEST_URL
           python -m pytest "src/tests" -p no:warnings --maxfail=2 -s
