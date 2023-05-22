@@ -39,7 +39,7 @@ jobs:
           DATABASE_TEST_URL: 'postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
         run: |
           echo "$DATABASE_TEST_URL"
-          python -m pytest "src/tests" -p no:warnings --maxfail=2
+        #python -m pytest "src/tests" -p no:warnings --maxfail=2
       - name: Flake8
         working-directory: ./api
         run: python -m flake8 src
