@@ -7,7 +7,7 @@ on:
 env:
   # see for tr: https://linuxhint.com/bash_tr_command/
   # here, it converts all uppercase in GITHUB_REPOSITORY to lowercase
-  IMAGE: docker.pkg.github.com/$(echo $GITHUB_REPOSITORY | tr [:upper:] [:lower:])/app
+  IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr [:upper:] [:lower:])/app
 
 jobs:
   build:
