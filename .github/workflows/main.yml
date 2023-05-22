@@ -37,9 +37,10 @@ jobs:
         working-directory: ./api
         env:
           DATABASE_TEST_URL: sqlite://sqlite.db
+          DATABASE_URL: sqlite://sqlite.db
         run: |
           echo $DATABASE_TEST_URL
-          python -m pytest "src/tests" -p no:warnings --maxfail=2
+          python -m pytest "src/tests" -p no:warnings --maxfail=2 -s
       - name: Flake8
         working-directory: ./api
         run: python -m flake8 src
