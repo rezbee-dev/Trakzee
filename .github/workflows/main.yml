@@ -41,9 +41,9 @@ jobs:
       - name: Pytest
         working-directory: ./api
         env:
-          FLASK_DEBUG=1
-          FLASK_ENV=development
-          APP_SETTINGS=server.config.DevelopmentConfig
+          FLASK_DEBUG: 1
+          FLASK_ENV: development
+          APP_SETTINGS: server.config.DevelopmentConfig
           DATABASE_URL: ${{ env.DATABASE_URL }}
           DATABASE_TEST_URL: ${{ env.DATABASE_TEST_URL }}
         run: python -m pytest "src/tests" -p no:warnings
