@@ -29,11 +29,11 @@ class UserService(object):
     @staticmethod
     def delete_all():
         return UserDao.delete_all()
-    
+
     @staticmethod
     def delete_by_id(id):
         return UserDao.delete_by_id(id)
-    
+
     # todo: implement guards
     @staticmethod
     def update_by_id(id, data):

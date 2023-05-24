@@ -9,7 +9,9 @@ class UserDao(object):
 
     @staticmethod
     def find_by_email(email):
-        return db.session.execute(db.select(UserSchema).where(UserSchema.email == email)).one_or_none()
+        return db.session.execute(
+            db.select(UserSchema).where(UserSchema.email == email)
+        ).one_or_none()
 
     @staticmethod
     def find_all():
@@ -24,29 +26,29 @@ class UserDao(object):
     def delete_all():
         db.session.execute(db.delete(UserSchema))
         db.session.commit()
-        
+
     @staticmethod
     def delete_by_id(id):
         user = UserDao.find_by_id(id)
-        
+
         if user is None:
             return None
-        
+
         db.session.delete(user)
         db.session.commit()
-        
+
         return user
-    
+
     @staticmethod
     def update_by_id(id, data):
         user = UserDao.find_by_id(id)
-        
+
         if user is None:
             return None
-        
+
         user.username = data["username"]
         user.email = data["email"]
-        
+
         db.session.commit()
-        
+
         return user

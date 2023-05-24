@@ -52,10 +52,10 @@ class User(Resource):
 
     def delete(self, user_id):
         user = UserService.delete_by_id(user_id)
-        
+
         if user is None:
             api.abort(404, f"User {user_id} does not exist")
-            
+
         return {"message": f"{user.email} was removed!"}, 200
 
     @api.expect(UserModel)
@@ -63,9 +63,8 @@ class User(Resource):
         req = request.get_json()
 
         user = UserService.update_by_id(user_id, req)
-        
+
         if user is None:
             api.abort(404, f"User {user_id} does not exist")
-        
+
         return {"message": f"{user.id} was updated!"}, 200
-        
