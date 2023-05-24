@@ -9,9 +9,7 @@ class UserDao(object):
 
     @staticmethod
     def find_by_email(email):
-        return db.session.execute(
-            db.select(UserSchema).where(UserSchema.email == email)
-        ).one_or_none()
+        return db.session.execute(db.select(UserSchema).where(UserSchema.email == email)).one_or_none()
 
     @staticmethod
     def find_all():
