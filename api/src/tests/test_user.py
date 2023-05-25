@@ -210,9 +210,7 @@ def test_update_user(test_app, test_database, add_user):
         ],
     ],
 )
-def test_update_user_invalid(
-    test_app, test_database, user_id, payload, status_code, message
-):
+def test_update_user_invalid(test_app, test_database, user_id, payload, status_code, message):
     api = test_app.test_client()
 
     res = api.put(f"/users/{user_id}", json=payload)
