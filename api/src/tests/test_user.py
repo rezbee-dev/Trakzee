@@ -1,4 +1,7 @@
 # POST /users
+import pytest
+
+
 def test_add_user(test_app, test_database):
     # Arrange
     test_data = {"username": "test_add_user", "email": "test_add_user@email.com"}
@@ -180,51 +183,60 @@ def test_update_user(test_app, test_database, add_user):
     assert test_data_2["email"] in data2["email"]
 
 
-def test_update_user_empty(test_app, test_database, add_user):
+@pytest.mark.parametrize(
+    "user_id, payload, status_code, message",
+    [
+        [1, {}, 400, "Input payload validation failed"],
+        [
+            1,
+            {"email": "test_update_user_missing_username@email.com"},
+            400,
+            "Input payload validation failed",
+        ],
+        [
+            1,
+            {"username": "test_update_user_missing_email"},
+            400,
+            "Input payload validation failed",
+        ],
+        [
+            999,
+            {
+                "username": "test_update_user",
+                "email": "test_update_user@email.com",
+            },
+            404,
+            "User 999 does not exist",
+        ],
+    ],
+)
+def test_update_user_invalid(
+    test_app, test_database, user_id, payload, status_code, message
+):
     api = test_app.test_client()
 
-    res = api.put("/users/1", json={})
+    res = api.put(f"/users/{user_id}", json=payload)
     data = res.json
 
-    assert res.status_code == 400
-    assert "Input payload validation failed" in data["message"]
+    assert res.status_code == status_code
+    assert message in data["message"]
 
 
-def test_update_user_missing_username(test_app, test_database, add_user):
+def test_update_user_invalid_duplicate_email(test_app, test_database, add_user):
     test_data = {
-        "email": "test_update_user_missing_username@email.com",
+        "username": "test_update_user_duplicate",
+        "email": "test_update_user_duplicate_email@email.com",
     }
+    test_data_2 = {
+        "username": "test_update_user_duplicate_2",
+        "email": "test_update_user_duplicate_email_2@email.com",
+    }
+    add_user(test_data)
+    user_2 = add_user(test_data_2)
     api = test_app.test_client()
 
-    res = api.put("/users/1", json=test_data)
+    res = api.put(f"/users/{user_2.id}", json=test_data)
     data = res.json
 
-    assert res.status_code == 400
-    assert "Input payload validation failed" in data["message"]
-
-
-def test_update_user_missing_email(test_app, test_database, add_user):
-    test_data = {
-        "username": "test_update_user_missing_email",
-    }
-    api = test_app.test_client()
-
-    res = api.put("/users/1", json=test_data)
-    data = res.json
-
-    assert res.status_code == 400
-    assert "Input payload validation failed" in data["message"]
-
-
-def test_update_user_invalid_id(test_app, test_database, add_user):
-    test_data = {
-        "username": "test_update_user",
-        "email": "test_update_user@email.com",
-    }
-    api = test_app.test_client()
-
-    res = api.put("/users/999", json=test_data)
-    data = res.json
-
-    assert res.status_code == 404
-    assert "User 999 does not exist" in data["message"]
+    assert res.status_code == 409
+    assert "Sorry, that email already exists" in data["message"]

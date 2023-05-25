@@ -1,5 +1,5 @@
 from server.user.dao import UserDao
-from server.user.errors import DuplicateEmailException
+from server.user.errors import DuplicateEmailException, UserNotFoundException
 from server.user.schema import UserSchema
 
 
@@ -37,4 +37,12 @@ class UserService(object):
     # todo: implement guards
     @staticmethod
     def update_by_id(id, data):
+        user = UserDao.find_by_id(id)
+
+        if user is None:
+            raise UserNotFoundException
+
+        if user.email != data["email"] and UserDao.find_by_email(data["email"]):
+            raise DuplicateEmailException
+
         return UserDao.update_by_id(id, data)

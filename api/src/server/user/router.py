@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_restx import Api, Resource
 
-from server.user.errors import DuplicateEmailException
+from server.user.errors import DuplicateEmailException, UserNotFoundException
 from server.user.model import UserModel
 from server.user.service import UserService
 
@@ -62,9 +62,15 @@ class User(Resource):
     def put(self, user_id):
         req = request.get_json()
 
-        user = UserService.update_by_id(user_id, req)
-
-        if user is None:
+        try:
+            user = UserService.update_by_id(user_id, req)
+            return {"message": f"{user.id} was updated!"}, 200
+        except UserNotFoundException:
             api.abort(404, f"User {user_id} does not exist")
-
-        return {"message": f"{user.id} was updated!"}, 200
+            return
+        except DuplicateEmailException:
+            api.abort(409, "Sorry, that email already exists")
+            return
+        except Exception:
+            api.abort(500, "Unexpected error, server cannot handle request")
+            return
