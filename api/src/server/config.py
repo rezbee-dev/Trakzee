@@ -23,6 +23,7 @@ class ProductionConfig(BaseConfig):
         url = url.replace("postgres://", "postgresql://", 1)
 
     SQLALCHEMY_DATABASE_URI = url
+    SECRET_KEY = os.getenv("SECRET_KEY", BaseConfig.SECRET_KEY)
 
 
 # def app_settings(env):
