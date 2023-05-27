@@ -1,6 +1,7 @@
 import os
 from server.config import BaseConfig
 
+
 def test_development_config(test_app):
     test_app.config.from_object("server.config.DevelopmentConfig")
     assert test_app.config["SECRET_KEY"] == BaseConfig.SECRET_KEY
