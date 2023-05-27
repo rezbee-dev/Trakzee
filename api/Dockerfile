@@ -12,9 +12,11 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # for more info, see: https://stackoverflow.com/a/59812588
 ENV PYTHONUNBUFFERED 1
 
-# add and install requirements
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+COPY ./requirements-dev.txt .
+RUN pip install -r requirements-dev.txt
 
 # add app
 COPY . .
