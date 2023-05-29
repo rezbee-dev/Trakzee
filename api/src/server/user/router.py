@@ -20,6 +20,7 @@ class Users(Resource):
     @user_ns.response(201, "<user_email> was added!")
     @user_ns.response(400, "Email already exists!")
     def post(self):
+        """Creates a new user."""
         # See default error handling:
         # https://flask.palletsprojects.com/en/2.3.x/api/#flask.Request.on_json_loading_failed
         req = request.get_json()
@@ -36,17 +37,21 @@ class Users(Resource):
 
     @user_ns.marshal_with(UserModel, as_list=True)
     def get(self):
+        """Returns all users."""
         return UserService.find_all(), 200
 
-    def delete(self):
-        UserService.delete_all()
-        return {"message": "All users deleted"}, 204
+    # def delete(self):
+    #     UserService.delete_all()
+    #     return {"message": "All users deleted"}, 204
 
 
 @user_ns.route("/<int:user_id>")
 class User(Resource):
     @user_ns.marshal_with(UserModel)
+    @user_ns.response(200, "Success")
+    @user_ns.response(404, "User <user_id> does not exist")
     def get(self, user_id):
+        """Returns a single user"""
         user = UserService.find_by_id(user_id)
 
         if user is None:
@@ -55,7 +60,10 @@ class User(Resource):
 
         return user, 200
 
+    @user_ns.response(200, "<user_id> was removed!")
+    @user_ns.response(404, "User <user_id> does not exist")
     def delete(self, user_id):
+        """Deletes a user"""
         user = UserService.delete_by_id(user_id)
 
         if user is None:
@@ -64,7 +72,11 @@ class User(Resource):
         return {"message": f"{user.email} was removed!"}, 200
 
     @user_ns.expect(UserModel)
+    @user_ns.response(200, "<user_id> was updated!")
+    @user_ns.response(400, "Sorry, that email already exists")
+    @user_ns.response(404, "User <user_id> does not exist")
     def put(self, user_id):
+        """Updates a user"""
         req = request.get_json()
 
         try:
