@@ -78,8 +78,9 @@ def test_get_user(test_app, test_database, add_user):
     assert "test_get_user@email.com" in data["email"]
 
 
-def test_get_user_invalid_id(test_app, test_database):
+def test_get_user_invalid_id(test_app, test_database, delete_users):
     api = test_app.test_client()
+    delete_users()
 
     res = api.get("/users/5")
     data = res.json
