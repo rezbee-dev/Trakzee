@@ -17,20 +17,13 @@ Simple web app for tracking your habits. Main purpose is to learn and practice f
 **Lint code**
 - `docker compose exec api flake8 src`
 
-**Format code (check)**
-- `docker compose exec api black src --check`
-
 **Format code**
-- Check before formatting
-  - `docker compose exec api black src --check`
-- Format
-  - `docker compose exec api black src`
+- `docker compose exec api black src --check --line-length 119`
+- `docker compose exec api black src --line-length 119`
 
 **Organize imports**
-- Check
-  - `docker-compose exec api isort src --check-only`
-- Run
-  - `docker-compose exec api isort src`
+- `docker-compose exec api isort src --check-only`
+- `docker-compose exec api isort src`
 
 ### Db commands
 
@@ -39,6 +32,12 @@ Simple web app for tracking your habits. Main purpose is to learn and practice f
 
 **Seed database**
 - `docker compose exec api python src/main.py seed_db`
+
+**Create initial migration folder**
+- `docker compose exec api python src/main.py db init`
+
+**Create new migration**
+- `docker compose exec api python src/main.py db migrate -m "Migration name`
 
 ### Pytest commands
 

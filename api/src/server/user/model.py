@@ -6,6 +6,7 @@ UserModel = Model(
         "id": fields.Integer(readOnly=True),
         "username": fields.String(required=True),
         "email": fields.String(required=True),
+        "active": fields.Boolean(default=True),
         "created_date": fields.DateTime,
     },
 )

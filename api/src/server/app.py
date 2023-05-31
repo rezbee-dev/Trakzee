@@ -1,12 +1,14 @@
 import os
 
 from flask import Flask
+from flask_migrate import Migrate
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 # instantiate the db
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 # application factory pattern
@@ -22,6 +24,7 @@ def create_app(script_info=None):
 
     # set up extensions
     db.init_app(app)
+    migrate.init_app = Migrate(app, db)
 
     # Setup API
     from server.ping.router import ping_ns
