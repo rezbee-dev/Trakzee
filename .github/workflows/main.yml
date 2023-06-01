@@ -10,8 +10,8 @@ env:
   IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr [:upper:] [:lower:])/app
 
 jobs:
-  test:
-    name: Run tests & style-checks
+  test-api:
+    name: Run tests & style-checks for api
     runs-on: ubuntu-latest
     # services:
     #   postgres:
@@ -51,11 +51,24 @@ jobs:
       - name: isort
         working-directory: ./api
         run: python -m isort src --check-only
+  
+  test-client:
+    name: Run tests & style-checks for client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Lint client code
+        run: |
+          cd client
+          npm ci
+          npm run lint
+          npm run test --if-present
 
-  build:
+  build-api:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-api
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -82,7 +95,7 @@ jobs:
   deploy:
     name: Deploy to Heroku
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-api
     env:
       HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
     steps:
