@@ -35,7 +35,7 @@ def create_app(script_info=None):
     api.add_namespace(user_ns, path="/api/users")
 
     api.init_app(app)
-    
+
     # shell context for flask cli
     # enables app and db to be present in flask shell session
     # allows you to work with these entities without having to import them
