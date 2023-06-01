@@ -30,12 +30,12 @@ def create_app(script_info=None):
     from server.ping.router import ping_ns
     from server.user.router import user_ns
 
-    api = Api(version="1.0", title="Habit Tracker API", doc="/doc")
-    api.add_namespace(ping_ns, path="/ping")
-    api.add_namespace(user_ns, path="/users")
+    api = Api(version="1.0", title="Habit Tracker API", doc="/api/docs")
+    api.add_namespace(ping_ns, path="/api/ping")
+    api.add_namespace(user_ns, path="/api/users")
 
     api.init_app(app)
-
+    
     # shell context for flask cli
     # enables app and db to be present in flask shell session
     # allows you to work with these entities without having to import them

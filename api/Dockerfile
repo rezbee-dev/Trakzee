@@ -25,4 +25,4 @@ COPY . .
 # RUN chmod +x /usr/app/backend/docker-entrypoint.sh
 
 # Starting flask app w/o waiting for db startup
-CMD ["python", "src/main.py", "run", "-h", "0.0.0.0"]
+CMD ["python", "src/main.py", "run", "-h", "0.0.0.0", "-p", "5004"]

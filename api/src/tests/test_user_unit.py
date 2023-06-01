@@ -12,7 +12,7 @@ def test_add_user(test_app, monkeypatch):
     test_data = {"username": "test_add_user", "email": "test_add_user@email.com"}
     api = test_app.test_client()
 
-    res = api.post("/users", json=test_data)
+    res = api.post("/api/users", json=test_data)
     data = res.json
 
     assert res.status_code == 201

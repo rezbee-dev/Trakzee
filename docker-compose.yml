@@ -1,4 +1,20 @@
 services:
+
+  api-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/usr/app/client
+      # Anonymous volume to prevent overwriting container node_modules when mounted
+      - /usr/app/client/node_modules
+    ports:
+      - 5003:5003
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - api
+
   api:
     build:
       context: ./api
@@ -6,7 +22,7 @@ services:
     volumes:
       - ./api:/usr/app/api
     ports:
-      - 5004:5000
+      - 5004:5004
     environment:
       - FLASK_DEBUG=1
       - FLASK_ENV=development
