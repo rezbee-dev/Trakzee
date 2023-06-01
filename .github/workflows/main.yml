@@ -11,7 +11,7 @@ env:
 
 jobs:
   test-api:
-    name: Run tests & style-checks for api
+    name: API CI
     runs-on: ubuntu-latest
     # services:
     #   postgres:
@@ -53,7 +53,7 @@ jobs:
         run: python -m isort src --check-only
   
   test-client:
-    name: Run tests & style-checks for client
+    name: Client CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
