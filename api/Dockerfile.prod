@@ -16,7 +16,7 @@ COPY ./api/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/app/wheels -r requirements.txt
 
 # add app
-COPY ./api .
+COPY . .
 
 # lint
 # if any fails, then build stops
@@ -57,4 +57,4 @@ USER myuser
 # run gunicorn
 # see: https://flask.palletsprojects.com/en/2.3.x/deploying/gunicorn/#running
 # $PORT is supplied by Heroku
-CMD cd api/src && gunicorn --bind 0.0.0.0:$PORT main:app
+CMD cd src && gunicorn --bind 0.0.0.0:$PORT main:app
