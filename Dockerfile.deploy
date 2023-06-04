@@ -25,26 +25,6 @@ RUN npm run build
 RUN npm prune --production
 
 ############################################################
-# Setup flask
-############################################################
-FROM python:3.11.2-slim-buster as build-flask
-
-# set working directory
-WORKDIR /usr/app/api
-
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# add and install requirements
-RUN pip install --upgrade pip
-COPY ./api/requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/app/api/wheels -r requirements.txt
-
-# add app
-COPY ./api .
-
-############################################################
 # Final
 ############################################################
 FROM nginx:stable-alpine
