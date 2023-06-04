@@ -41,9 +41,13 @@ ENV APP_SETTINGS server.config.ProductionConfig
 ARG SECRET_KEY
 ENV SECRET_KEY=$SECRET_KEY
 
-# install dependencies
+# copy from build stages
 COPY --from=builder /usr/app/wheels /wheels
 COPY --from=builder /usr/app/requirements.txt .
+
+# install dependencies
+# see https://pip.pypa.io/en/stable/installation/
+RUN python -m ensurepip --upgrade
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
