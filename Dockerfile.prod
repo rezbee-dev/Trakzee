@@ -12,11 +12,11 @@ ENV PYTHONUNBUFFERED 1
 
 # add and install requirements
 RUN pip install --upgrade pip
-COPY requirements.txt .
+COPY ./api/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/app/wheels -r requirements.txt
 
 # add app
-COPY . .
+COPY ./api .
 
 # lint
 # if any fails, then build stops
@@ -57,4 +57,4 @@ USER myuser
 # run gunicorn
 # see: https://flask.palletsprojects.com/en/2.3.x/deploying/gunicorn/#running
 # $PORT is supplied by Heroku
-CMD cd src && gunicorn --bind 0.0.0.0:$PORT main:app
+CMD cd api/src && gunicorn --bind 0.0.0.0:$PORT main:app
