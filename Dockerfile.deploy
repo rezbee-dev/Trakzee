@@ -40,7 +40,6 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 COPY ./api/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/app/api/wheels -r requirements.txt
-RUN cp -r /usr/app/wheels /wheels
 
 # add app
 COPY ./api .
