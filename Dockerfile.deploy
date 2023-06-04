@@ -68,8 +68,9 @@ COPY ./http/default.conf /etc/nginx/conf.d/default.conf
 
 # install dependencies
 # see https://pip.pypa.io/en/stable/installation/
-RUN python -m ensurepip --default-pip
-RUN python -m pip install --upgrade pip setuptools wheel
+RUN apk update && apk add --no-cache --virtual build-deps python3-dev
+RUN python3 -m ensurepip --default-pip
+RUN python3 -m pip3 install --upgrade pip setuptools wheel
 RUN pip install --no-cache /wheels/*
 
 # add and run as non-root user
