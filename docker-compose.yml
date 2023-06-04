@@ -49,8 +49,4 @@ services:
       timeout: 5s
       retries: 5
 
-  api-http:
-    build:
-      context: ./http
-      dockerfile: Dockerfile
     
