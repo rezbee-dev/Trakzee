@@ -41,7 +41,6 @@ RUN pip install --upgrade pip
 COPY ./api/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/app/wheels -r requirements.txt
 RUN cp -r /usr/app/wheels /wheels
-RUN pip install --no-cache /wheels/*
 
 # add app
 COPY ./api .
@@ -66,6 +65,9 @@ ENV SECRET_KEY=$SECRET_KEY
 COPY --from=build-react /usr/app/client/dist /usr/share/nginx/html
 COPY --from=build-flask /usr/app/api .
 COPY ./http/default.conf /etc/nginx/conf.d/default.conf
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
 
 # add and run as non-root user
 RUN adduser --disabled-password myuser
