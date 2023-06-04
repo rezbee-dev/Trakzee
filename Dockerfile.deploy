@@ -73,4 +73,4 @@ USER myuser
 # `sed -i ...` -> replace $PORT in default.conf with env var PORT (set by heroku)
 CMD cd src && gunicorn -b 0.0.0.0:5000 main:app --daemon && \
       sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
-      nginx -g 'daemon off;
+      nginx -g 'daemon off;'
