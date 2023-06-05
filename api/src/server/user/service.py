@@ -1,13 +1,16 @@
+from flask import current_app
+
 from server.user.dao import UserDao
 from server.user.errors import DuplicateEmailException, UserNotFoundException
 from server.user.schema import UserSchema
-
+from server.app import bcrypt
 
 # See: https://stackoverflow.com/questions/332255/difference-between-class-foo-and-class-fooobject-in-python
 class UserService(object):
     @staticmethod
     def create(data):
-        user = UserSchema(username=data["username"], email=data["email"])
+        hashed_password = bcrypt.generate_password_hash(data["password"], current_app.config.get('BCRYPT_LOG_ROUNDS')).decode()
+        user = UserSchema(username=data["username"], email=data["email"], password=hashed_password)
 
         if UserDao.find_by_email(user.email):
             raise DuplicateEmailException

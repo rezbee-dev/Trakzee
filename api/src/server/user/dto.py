@@ -1,7 +1,7 @@
 from flask_restx import Model, fields
 
-UserModel = Model(
-    "UserModel",
+UserDTO = Model(
+    "UserDTO",
     {
         "id": fields.Integer(readOnly=True),
         "username": fields.String(required=True),
@@ -10,3 +10,5 @@ UserModel = Model(
         "created_date": fields.DateTime,
     },
 )
+
+UserAuthDTO = Model.inherit("UserAuthDTO", UserDTO, {"password": fields.String(required=True)})

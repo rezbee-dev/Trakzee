@@ -4,7 +4,7 @@ import pytest
 
 def test_add_user(test_app, test_database):
     # Arrange
-    test_data = {"username": "test_add_user", "email": "test_add_user@email.com"}
+    test_data = {"username": "test_add_user", "email": "test_add_user@email.com", "password": "test_password"}
     api = test_app.test_client()
 
     # Act
@@ -28,7 +28,7 @@ def test_add_user_empty(test_app, test_database):
 
 
 def test_add_user_missing_username(test_app, test_database):
-    test_data = {"email": "test_add_user_missing_username@email.com"}
+    test_data = {"email": "test_add_user_missing_username@email.com", "password": "test_password"}
     api = test_app.test_client()
 
     res = api.post("/api/users", json=test_data)
@@ -39,7 +39,7 @@ def test_add_user_missing_username(test_app, test_database):
 
 
 def test_add_user_missing_email(test_app, test_database):
-    test_data = {"username": "test_add_user_missing_email"}
+    test_data = {"username": "test_add_user_missing_email", "password": "test_password"}
     api = test_app.test_client()
 
     res = api.post("/api/users", json=test_data)
@@ -53,6 +53,7 @@ def test_add_user_duplicate_email(test_app, test_database):
     test_data = {
         "username": "test_add_user_duplicate_email",
         "email": "test_add_user_duplicate_email@email.com",
+        "password": "test_password"
     }
     api = test_app.test_client()
 
@@ -66,7 +67,7 @@ def test_add_user_duplicate_email(test_app, test_database):
 
 # GET /api/users/id
 def test_get_user(test_app, test_database, add_user):
-    test_data = {"username": "test_get_user", "email": "test_get_user@email.com"}
+    test_data = {"username": "test_get_user", "email": "test_get_user@email.com", "password": "test_password"}
     user = add_user(test_data)
     api = test_app.test_client()
 
@@ -76,6 +77,7 @@ def test_get_user(test_app, test_database, add_user):
     assert res.status_code == 200
     assert "test_get_user" in data["username"]
     assert "test_get_user@email.com" in data["email"]
+    assert "password" not in data
 
 
 def test_get_user_invalid_id(test_app, test_database, delete_users):
@@ -94,10 +96,12 @@ def test_get_all_users(test_app, test_database, add_user, delete_users):
     test_data = {
         "username": "test_get_all_users",
         "email": "test_get_all_users@email.com",
+        "password": "test_password"
     }
     test_data_2 = {
         "username": "test_get_all_users_2",
         "email": "test_get_all_users_2@email.com",
+        "password": "test_password"
     }
     delete_users()
     add_user(test_data)
@@ -113,6 +117,8 @@ def test_get_all_users(test_app, test_database, add_user, delete_users):
     assert "test_get_all_users@email.com" in data[0]["email"]
     assert "test_get_all_users_2" in data[1]["username"]
     assert "test_get_all_users_2@email.com" in data[1]["email"]
+    assert "password" not in data[0]
+    assert "password" not in data[1]
 
 
 # DELETE /api/users/id
@@ -120,6 +126,7 @@ def test_remove_user(test_app, test_database, add_user, delete_users):
     test_data = {
         "username": "test_remove_user",
         "email": "test_remove_user@email.com",
+        "password": "test_password"
     }
     delete_users()
     user = add_user(test_data)
@@ -162,10 +169,12 @@ def test_update_user(test_app, test_database, add_user):
     test_data = {
         "username": "test_update_user",
         "email": "test_update_user@email.com",
+        "password": "test_password"
     }
     test_data_2 = {
         "username": "test_update_user_2",
         "email": "test_update_user_2@email.com",
+        "password": "test_password"
     }
     user = add_user(test_data)
     api = test_app.test_client()
@@ -225,10 +234,12 @@ def test_update_user_invalid_duplicate_email(test_app, test_database, add_user):
     test_data = {
         "username": "test_update_user_duplicate",
         "email": "test_update_user_duplicate_email@email.com",
+        "password": "test_password"
     }
     test_data_2 = {
         "username": "test_update_user_duplicate_2",
         "email": "test_update_user_duplicate_email_2@email.com",
+        "password": "test_password"
     }
     add_user(test_data)
     user_2 = add_user(test_data_2)

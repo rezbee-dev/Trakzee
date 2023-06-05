@@ -5,11 +5,11 @@ from flask_migrate import Migrate
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_bcrypt import Bcrypt
 
-# instantiate the db
 db = SQLAlchemy()
 migrate = Migrate()
-
+bcrypt = Bcrypt()
 
 # application factory pattern
 # see: https://flask.palletsprojects.com/en/2.3.x/patterns/appfactories/
@@ -25,6 +25,7 @@ def create_app(script_info=None):
     # set up extensions
     db.init_app(app)
     migrate.init_app = Migrate(app, db)
+    bcrypt.init_app(app)
 
     # Setup API
     from server.ping.router import ping_ns

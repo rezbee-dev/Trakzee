@@ -2,21 +2,21 @@ from flask import request
 from flask_restx import Namespace, Resource
 
 from server.user.errors import DuplicateEmailException, UserNotFoundException
-from server.user.model import UserModel
+from server.user.dto import UserDTO, UserAuthDTO
 from server.user.service import UserService
 
 # user_blueprint = Blueprint("user", __name__)
 # api = Api(user_blueprint, validate=True)
-# api.models[UserModel.name] = UserModel
+# api.models[UserDTO.name] = UserDTO
 
 user_ns = Namespace("users", validate=True)
-user_ns.models[UserModel.name] = UserModel
-
+user_ns.models[UserDTO.name] = UserDTO
+user_ns.models[UserAuthDTO.name] = UserAuthDTO
 
 @user_ns.route("")
 class Users(Resource):
     # see https://flask-restx.readthedocs.io/en/stable/swagger.html#the-api-expect-decorator
-    @user_ns.expect(UserModel)
+    @user_ns.expect(UserAuthDTO)
     @user_ns.response(201, "<user_email> was added!")
     @user_ns.response(400, "Email already exists!")
     def post(self):
@@ -35,7 +35,7 @@ class Users(Resource):
             print("ERROR!\n", err)
             return {"message": "Unexcepted error, server cannot handle request"}, 500
 
-    @user_ns.marshal_with(UserModel, as_list=True)
+    @user_ns.marshal_with(UserDTO, as_list=True)
     def get(self):
         """Returns all users."""
         return UserService.find_all(), 200
@@ -47,7 +47,7 @@ class Users(Resource):
 
 @user_ns.route("/<int:user_id>")
 class User(Resource):
-    @user_ns.marshal_with(UserModel)
+    @user_ns.marshal_with(UserDTO)
     @user_ns.response(200, "Success")
     @user_ns.response(404, "User <user_id> does not exist")
     def get(self, user_id):
@@ -71,7 +71,7 @@ class User(Resource):
 
         return {"message": f"{user.email} was removed!"}, 200
 
-    @user_ns.expect(UserModel)
+    @user_ns.expect(UserDTO)
     @user_ns.response(200, "<user_id> was updated!")
     @user_ns.response(400, "Sorry, that email already exists")
     @user_ns.response(404, "User <user_id> does not exist")
