@@ -1,15 +1,16 @@
 import os
 
 from flask import Flask
+from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
+
 
 # application factory pattern
 # see: https://flask.palletsprojects.com/en/2.3.x/patterns/appfactories/
@@ -28,8 +29,8 @@ def create_app(script_info=None):
     bcrypt.init_app(app)
 
     # Setup API
-    from server.ping.router import ping_ns
     from server.account.controller import AccountRouter
+    from server.ping.router import ping_ns
     from server.profile.controller import ProfileRouter
 
     api = Api(version="1.0", title="Habit Tracker API", doc="/api/docs")

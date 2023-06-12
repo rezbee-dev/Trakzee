@@ -1,15 +1,17 @@
-from flask import request
+# from flask import request
 from flask_restx import Namespace, Resource
 
-from server.profile.dto import *
-from server.profile.error import *
-from server.profile.service import ProfileService
+from server.profile.dto import ProfileRequest, ProfileResponse
+
+# from server.profile.error import DuplicateUsernameException
+# from server.profile.service import ProfileService
 
 ProfileRouter = Namespace("profile", validate=True)
 
 # Swagger Doc & Marshalling
 ProfileRouter.add_model(ProfileResponse.name, ProfileResponse)
 ProfileRouter.add_model(ProfileRequest.name, ProfileRequest)
+
 
 @ProfileRouter.route("")
 class Profiles(Resource):
@@ -19,15 +21,16 @@ class Profiles(Resource):
     @ProfileRouter.response(400, "Username already taken!")
     def post(self):
         """Creates a new profile."""
-        req = request.get_json()
+        pass
+        # req = request.get_json()
 
-        try:
-            profile = ProfileService.create(req)
-            return {"message": f"{profile.username}'s profile created!"}, 201
-        except DuplicateUsernameException:
-            ProfileRouter.abort(409, "Username already taken!")
-        except Exception as err:
-            ProfileRouter.abort(500, "Unexcepted error, server cannot handle request")
+        # try:
+        #     profile = ProfileService.create(req)
+        #     return {"message": f"{profile.username}'s profile created!"}, 201
+        # except DuplicateUsernameException:
+        #     ProfileRouter.abort(409, "Username already taken!")
+        # except Exception:
+        #     ProfileRouter.abort(500, "Unexcepted error, server cannot handle request")
 
 
 # @ProfileRouter.route("/<int:profile_id>")

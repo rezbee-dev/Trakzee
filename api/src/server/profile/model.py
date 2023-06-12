@@ -2,6 +2,7 @@ from sqlalchemy.sql import func
 
 from server.app import db
 
+
 class ProfileModel(db.Model):
     __tablename__ = "profile"
 

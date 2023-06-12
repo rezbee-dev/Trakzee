@@ -15,7 +15,7 @@ class ProfileDao(object):
     # @staticmethod
     # def find_by_id(id):
     #     return db.session.get(ProfileSchema, {"id": id})
-    
+
     # @staticmethod
     # def find_all():
     #     return db.session.execute(db.select(ProfileSchema)).all()

@@ -4,8 +4,8 @@ AuthResponse = Model(
     "Auth response",
     {
         "id": fields.Integer(readOnly=True),
-        "email": fields.String(required=True),        
-    }
+        "email": fields.String(required=True),
+    },
 )
 
 AuthRequest = Model(
@@ -13,22 +13,12 @@ AuthRequest = Model(
     {
         "email": fields.String(required=True),
         "password": fields.String(required=True),
-    }
+    },
 )
 
-AuthRefresh = Model(
-    "Refresh token",
-    {
-        "refresh_token": fields.String(required=True)
-    }
-)
+AuthRefresh = Model("Refresh token", {"refresh_token": fields.String(required=True)})
 
-AuthTokens = Model(
-    "Access token",
-    {
-        "access_token": fields.String(required=True)
-    }
-)
+AuthTokens = Model("Access token", {"access_token": fields.String(required=True)})
 
 # AuthTokens = Model.clone(
 #     "Auth tokens",
@@ -43,8 +33,8 @@ AccountPartial = Model(
     {
         "id": fields.Integer(readOnly=True),
         "email": fields.String(required=True),
-        "verified": fields.Boolean(required=True)
-    }
+        "verified": fields.Boolean(required=True),
+    },
 )
 
 AccountFull = Model.inherit(
@@ -52,5 +42,5 @@ AccountFull = Model.inherit(
     AccountPartial,
     {
         "password": fields.String(required=True),
-    }
+    },
 )

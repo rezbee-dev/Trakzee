@@ -53,7 +53,7 @@ def test_add_user_duplicate_email(test_app, test_database):
     test_data = {
         "username": "test_add_user_duplicate_email",
         "email": "test_add_user_duplicate_email@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     api = test_app.test_client()
 
@@ -96,12 +96,12 @@ def test_get_all_users(test_app, test_database, add_user, delete_users):
     test_data = {
         "username": "test_get_all_users",
         "email": "test_get_all_users@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     test_data_2 = {
         "username": "test_get_all_users_2",
         "email": "test_get_all_users_2@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     delete_users()
     add_user(test_data)
@@ -123,11 +123,7 @@ def test_get_all_users(test_app, test_database, add_user, delete_users):
 
 # DELETE /api/users/id
 def test_remove_user(test_app, test_database, add_user, delete_users):
-    test_data = {
-        "username": "test_remove_user",
-        "email": "test_remove_user@email.com",
-        "password": "test_password"
-    }
+    test_data = {"username": "test_remove_user", "email": "test_remove_user@email.com", "password": "test_password"}
     delete_users()
     user = add_user(test_data)
     api = test_app.test_client()
@@ -166,15 +162,11 @@ def test_remove_user_invalid_id(test_app, test_database):
 
 # PUT /api/users/id
 def test_update_user(test_app, test_database, add_user):
-    test_data = {
-        "username": "test_update_user",
-        "email": "test_update_user@email.com",
-        "password": "test_password"
-    }
+    test_data = {"username": "test_update_user", "email": "test_update_user@email.com", "password": "test_password"}
     test_data_2 = {
         "username": "test_update_user_2",
         "email": "test_update_user_2@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     user = add_user(test_data)
     api = test_app.test_client()
@@ -234,12 +226,12 @@ def test_update_user_invalid_duplicate_email(test_app, test_database, add_user):
     test_data = {
         "username": "test_update_user_duplicate",
         "email": "test_update_user_duplicate_email@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     test_data_2 = {
         "username": "test_update_user_duplicate_2",
         "email": "test_update_user_duplicate_email_2@email.com",
-        "password": "test_password"
+        "password": "test_password",
     }
     add_user(test_data)
     user_2 = add_user(test_data_2)

@@ -5,8 +5,9 @@ class BaseConfig:
     TESTING = False
     SECRET_KEY = "my_secret_key"
     BCRYPT_LOG_ROUNDS = 13
-    ACCESS_TOKEN_EXPIRATION = 900       # 15 minutes
+    ACCESS_TOKEN_EXPIRATION = 900  # 15 minutes
     REFRESH_TOKEN_EXPIRATION = 2592000  # 30 days
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")

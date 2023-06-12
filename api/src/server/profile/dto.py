@@ -1,6 +1,6 @@
 from flask_restx import Model, fields
 
-from server.account.dto import *
+from server.account.dto import AccountPartial
 
 ProfileResponse = Model.clone(
     "Profile response",
@@ -16,5 +16,5 @@ ProfileRequest = Model(
     "Profile request",
     {
         "username": fields.String(required=True),
-    }
+    },
 )
