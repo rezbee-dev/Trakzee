@@ -37,7 +37,10 @@ Simple web app for tracking your habits. Main purpose is to learn and practice f
 - `docker compose exec api python src/main.py db init`
 
 **Create new migration**
-- `docker compose exec api python src/main.py db migrate -m "Migration name`
+- `docker compose exec api python src/main.py db migrate -m "Migration name"`
+
+**Apply migration**
+- `docker compose exec api python src/main.py db upgrade`
 
 ### Pytest commands
 

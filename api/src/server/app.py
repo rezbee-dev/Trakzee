@@ -29,11 +29,13 @@ def create_app(script_info=None):
 
     # Setup API
     from server.ping.router import ping_ns
-    from server.user.router import user_ns
+    from server.account.controller import AccountRouter
+    from server.profile.controller import ProfileRouter
 
     api = Api(version="1.0", title="Habit Tracker API", doc="/api/docs")
     api.add_namespace(ping_ns, path="/api/ping")
-    api.add_namespace(user_ns, path="/api/users")
+    api.add_namespace(AccountRouter, path="/api/account")
+    api.add_namespace(ProfileRouter, path="/api/profile")
 
     api.init_app(app)
 
