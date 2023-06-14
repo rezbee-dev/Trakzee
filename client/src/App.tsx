@@ -1,12 +1,18 @@
-import UsersComponent from "./modules/user/UsersComponent"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/Landing';
+import UserHomePage from './pages/UserHome';
+import NotFoundPage from './pages/NotFound';
 
 function App() {
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold underline mb-4">Users!</h1>
-      <UsersComponent />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/account" element={<UserHomePage username='test' />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
   )
 }
 
