@@ -2,7 +2,6 @@ from flask import request
 from flask_restx import Namespace, Resource
 
 from server.profile.dto import ProfileRequest, ProfileResponse
-
 from server.profile.error import DuplicateUsernameException
 from server.profile.service import ProfileService
 
