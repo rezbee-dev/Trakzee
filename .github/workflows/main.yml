@@ -50,7 +50,7 @@ jobs:
         run: python -m black --line-length 119 src --check
       - name: isort
         working-directory: ./api
-        run: python -m isort src --check-only
+        run: python -m isort src --check-only --line-length 119
   
   test-client:
     name: Client CI

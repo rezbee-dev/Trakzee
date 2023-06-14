@@ -4,8 +4,8 @@
 
 import pytest
 
+from server.account.service import AccountService
 from server.app import create_app, db
-from server.user.service import UserService
 
 
 # scopes determine how often fixture is invoked
@@ -29,19 +29,27 @@ def test_database():
     db.drop_all()
 
 
+@pytest.fixture(scope="function")
+def add_account():
+    def _add_account(data):
+        return AccountService.register(data)
+
+    return _add_account
+
+
 # see: https://docs.pytest.org/en/latest/how-to/fixtures.html#factories-as-fixtures
-@pytest.fixture(scope="function")
-def add_user():
-    def _add_user(data):
-        user = UserService.create(data)
-        return user
+# @pytest.fixture(scope="function")
+# def add_user():
+#     def _add_user(data):
+#         user = UserService.create(data)
+#         return user
 
-    return _add_user
+#     return _add_user
 
 
-@pytest.fixture(scope="function")
-def delete_users():
-    def _delete_users():
-        UserService.delete_all()
+# @pytest.fixture(scope="function")
+# def delete_users():
+#     def _delete_users():
+#         UserService.delete_all()
 
-    return _delete_users
+#     return _delete_users
